@@ -5,6 +5,7 @@ import NewPlace from './pages/Places/NewPlaces-Page';
 import Users from './pages/Users/Users-Page';
 import UserPlaces from "./pages/Places/UserPlaces"
 import MainNavigation from "./Shared/Components/Navigation/Main-Header/MainNavigation"
+import Editplace from "./pages/Places/EditPlaces";
 
 function App() {
   return (
@@ -20,7 +21,10 @@ function App() {
             <UserPlaces />
           </Route>
           <Route path = "/places/new" exact>
-              <NewPlace/>
+            <NewPlace/>
+          </Route>
+          <Route path = "/places/:placeID" exact>
+            <Editplace />
           </Route>
         </Switch>
       </main>
