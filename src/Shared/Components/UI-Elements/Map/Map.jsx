@@ -4,11 +4,13 @@ import GoogleMapReact from "google-map-react"
 
 const Map = (props) =>
 {
-    return(
+    return( 
         <div className = {`map ${props.className}`} style = {props.style}>
-            <GoogleMapReact>
-                
-            </GoogleMapReact>
+            <GoogleMapReact 
+                bootstrapURLKeys = {{key: "AIzaSyDbRzSwVFauvPia29Yy08biPmxzUDiliM8"}}
+                defaultCenter = {props.coordinates}
+                defaultZoom = {16}
+            />
         </div>
     )
 }
