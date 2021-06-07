@@ -3,69 +3,34 @@ import "./NewPlaces.scss"
 import Input from "../../Shared/Components/FormElements/Input"
 import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from "../../Shared/Util/validators"
 import Button from "../../Shared/Components/FormElements/Button"
+import { useForm } from "../../Shared/Hooks/form-hook"
 
 
 
 
-const formReducer = (state, action) =>
-{
-    switch(action.type)
-    {
-        case 'INPUT_CHANGE': 
-            let formIsValid = true;
-            for(const inputID in state.inputs)
-            {
-                if(inputID === action.inputID)
-                {
-                    formIsValid = formIsValid && action.isValid
-                }
-                else
-                {
-                    formIsValid = formIsValid && state.inputs[inputID].isValid
-                }
-            }
-            return{
-                ...state,
-                inputs: {
-                    ...state.inputs,
-                    [action.inputID] : {value : action.value, isValid : action.isValid}
-                },
-                isValid: formIsValid
-            }
-            default: 
-                return state
-    }
-}
+
 
 const NewPlace = () =>
 {
-    
-    const [formState, dispatch] = useReducer(formReducer, {
-
-        inputs: {
-            title:{
+    const [formState , inputHandler] = useForm(
+        {
+            title: {
                 value: '',
-                isValid : false
+                isValid: false
             },
-            description: {
+            description : {
+                value: '',
+                isValid: false
+            },
+            address: {
                 value: '',
                 isValid: false
             }
         },
-
-        isValid: false
-
-
-    })
-    const inputHandler = useCallback((id, value, isValid) =>
-    {
-        dispatch({
-            type: 'INPUT_CHANGE',
-            inputID: id,
-            value: value,
-            isValid : isValid
-        })
-    }, [])
+        false
+    )
+    
+    
 
 
 
