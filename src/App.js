@@ -23,7 +23,7 @@ function App() {
           <Route path = "/places/new" exact>
             <NewPlace/>
           </Route>
-          <Route path = "/places/:placeID" exact>
+          <Route path = "/places/:placeID">
             <Editplace />
           </Route>
         </Switch>

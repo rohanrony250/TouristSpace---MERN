@@ -9,8 +9,9 @@ import { useForm } from "../../Shared/Hooks/form-hook"
 const Editplace  = (props) =>
 {
     const placeID = useParams().placeID
+    // console.log(placeID)
     const validPlaces = places.find(place => place.id === placeID)
-
+    console.log(validPlaces)
     const [formState , inputHandler] = useForm({
 
         title: {
@@ -22,6 +23,8 @@ const Editplace  = (props) =>
             isValid: true
         }
     }, true)
+
+    // console.log(formState.inputs)
 
     if(!validPlaces)
     {
