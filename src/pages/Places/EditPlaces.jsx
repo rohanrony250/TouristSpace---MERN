@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useEffect} from "react"
 import "./EditPlaces.scss"
 import {useParams} from "react-router-dom"
 import {places} from "../Places/UserPlaces"
@@ -10,22 +10,40 @@ const Editplace  = (props) =>
 {
     const placeID = useParams().placeID
     // console.log(placeID)
-    const validPlaces = places.find(place => place.id === placeID)
-    console.log(validPlaces)
-    const [formState , inputHandler] = useForm({
-
+    
+    // console.log(validPlaces)
+    const [formState, inputHandler, setFormData] = useForm({
+        
         title: {
-            value: validPlaces.title,
-            isValid: true
+            value: '',
+            isValid: false
         },
         description: {
-            value: validPlaces.description,
-            isValid: true
+            value: '',
+            isValid: false
         }
-    }, true)
+    }, false)
+    console.log(formState)
+    const validPlaces = places.filter(place => place.id === placeID)
+    console.log(validPlaces[0].title)
+    const placeUpdateSubmitHandler = event => 
+    {
+        event.preventDefault()
+        console.log(formState.inputs)
+    }
 
-    // console.log(formState.inputs)
-
+    useEffect(() =>{
+        setFormData({
+            title: {
+                value: validPlaces[0].title,
+                isValid: true
+            },
+            description: {
+                value: validPlaces[0].description,
+                isValid: true
+            }
+        }, true)
+    }, [setFormData])
     if(!validPlaces)
     {
         return(
@@ -36,8 +54,18 @@ const Editplace  = (props) =>
             </div>
         )
     }
+    // if(!formState.inputs.title.value)
+    // {
+    //     return(
+    //         <div className = "center">
+    //             <h2>
+    //                 Could not find place !
+    //             </h2>
+    //         </div>
+    //     )
+    // }
     return(
-        <form className = "place-form">
+        <form className = "place-form" onSubmit = {placeUpdateSubmitHandler}>
             <Input 
                 id = 'title'
                 element = 'input'

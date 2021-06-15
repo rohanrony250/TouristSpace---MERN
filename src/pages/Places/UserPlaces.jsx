@@ -15,7 +15,7 @@ export const places = [
             lat: 29.389714,
             lng: 48.0011012
         },
-        creator: '1'
+        creator: 'p1'
     },
     {
         id: 'p2',
@@ -27,7 +27,7 @@ export const places = [
             lat: 29.389714,
             lng: 48.0011012
         },
-        creator: '2'
+        creator: 'p2'
     }
 
 
