@@ -6,7 +6,7 @@ import Users from './pages/Users/Users-Page';
 import UserPlaces from "./pages/Places/UserPlaces"
 import MainNavigation from "./Shared/Components/Navigation/Main-Header/MainNavigation"
 import Editplace from "./pages/Places/EditPlaces";
-
+import Auth from "./pages/Authentication/Auth";
 function App() {
   return (
     <div className="App">
@@ -25,6 +25,9 @@ function App() {
           </Route>
           <Route path = "/places/:placeID">
             <Editplace />
+          </Route>
+          <Route path = "/auth" exact>
+            <Auth />
           </Route>
         </Switch>
       </main>
