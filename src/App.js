@@ -1,5 +1,5 @@
 import React, {useState, useCallback} from "react"
-import {BrowserRouter as Router, Route, Switch} from "react-router-dom"
+import {BrowserRouter as Router, Route, Switch, Redirect} from "react-router-dom"
 import './App.css';
 import NewPlace from './pages/Places/NewPlaces-Page';
 import Users from './pages/Users/Users-Page';
@@ -19,6 +19,43 @@ function App() {
   {
     setIsLoggedIn(false)
   },[])
+  let routes;
+  if(isLoggedIn)
+  {
+    routes = (
+    <Switch>
+      <Route path = "/" exact>
+        <Users />
+      </Route>
+      <Route path = "/:uID/places" exact>
+        <UserPlaces />
+      </Route>
+      <Route path = "/places/new" exact>
+        <NewPlace/>
+      </Route>
+      <Route path = "/places/:placeID">
+        <Editplace />
+      </Route>
+      <Redirect to = "/"/>
+    </Switch>
+    )
+  }
+  else{
+    routes = (
+    <Switch>
+      <Route path = "/" exact>
+        <Users />
+      </Route>
+      <Route path = "/:uID/places" exact>
+        <UserPlaces />
+      </Route>
+      <Route path = "/auth" exact>
+        <Auth />
+      </Route>
+      <Redirect to = "/auth"/>
+    </Switch>
+    )
+  }
   return (
     <div className="App">
       <AuthContext.Provider value = {{isLoggedIn: isLoggedIn, login: login, logout: logout}}>
@@ -26,21 +63,7 @@ function App() {
         <MainNavigation />
           <main>
             <Switch>
-              <Route path = "/" exact>
-                <Users />
-              </Route>
-              <Route path = "/:uID/places" exact>
-                <UserPlaces />
-              </Route>
-              <Route path = "/places/new" exact>
-                <NewPlace/>
-              </Route>
-              <Route path = "/places/:placeID">
-                <Editplace />
-              </Route>
-              <Route path = "/auth" exact>
-                <Auth />
-              </Route>
+              {routes}
             </Switch>
           </main>
         </Router>

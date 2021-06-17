@@ -5,6 +5,7 @@ import "./NavLinks.scss"
 
 const NavLinks = props =>
 {
+    const auth = useContext(AuthContext)
     return <ul className = "nav-links">
         <li>
             <NavLink to = "/" exact>

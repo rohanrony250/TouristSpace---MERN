@@ -1,11 +1,11 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
 import Card from "../../Shared/Components/UI-Elements/Card/Card"
 import Input from "../../Shared/Components/FormElements/Input"
 import "./Auth.scss"
 import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from "../../Shared/Util/validators"
 import { useForm } from "../../Shared/Hooks/form-hook" 
 import Button from "../../Shared/Components/FormElements/Button"
-
+import {AuthContext} from "../../Shared/Components/Context/auth-context"
 const Auth = () =>
 {
     const auth = useContext(AuthContext)
