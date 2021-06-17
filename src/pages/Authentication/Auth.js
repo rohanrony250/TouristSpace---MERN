@@ -8,6 +8,7 @@ import Button from "../../Shared/Components/FormElements/Button"
 
 const Auth = () =>
 {
+    const auth = useContext(AuthContext)
     const [LoginMode, setIsLoginMode] = useState(true)
     const [formState, inputHandler, setFormData] = useForm({
         email: {
@@ -23,6 +24,7 @@ const Auth = () =>
     const authSubmitHandler = (event) =>
     {
         event.preventDefault()
+        auth.login()
         console.log(formState.inputs)
     }
 
