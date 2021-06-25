@@ -6,5 +6,12 @@ const app = express()
 
 
 app.use('/api/places',PlacesRouter)
-app.use('/api/user', UserRouter)
+// app.use('/api/user', UserRouter)
+app.use((error, req, res, next) => {
+    if(res.headerSent)
+    {
+        return next(error)
+    }
+    res.status(error.code || 500)
+})
 app.listen(5000)

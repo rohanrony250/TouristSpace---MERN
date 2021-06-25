@@ -25,8 +25,21 @@ const router = express.Router();
 router.get('/:pid', (req, res, next) => {
     console.log("places details appears in this route...")
     const pid = req.params.pid
-    const userPlace = Places.find(place => {
+    const places = Places.find(place => {
         return place.id === pid
+    })
+    if(!places)
+    {
+        return res.status(404).json({message: "Place not found.."})
+    }
+    res.json({message: places})
+})
+
+router.get('/user/:uid', (req, res, next) => {
+    console.log("places details according to creator/user appears in this route")
+    const uid = req.params.uid
+    const userPlace = Places.find(user => {
+        return user.creator === uid
     })
     res.json({message: userPlace})
 })
