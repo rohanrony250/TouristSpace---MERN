@@ -1,4 +1,3 @@
-const uuid = require('uuid')
 const HttpError = require('../models/http-error')
 let Places = 
 [
@@ -30,19 +29,19 @@ const getPlaceById = (req, res, next) => {
     res.json({message: places})
 }
 
-const getPlaceByUserId = (req, res, next) => {
+const getPlacesByUserId = (req, res, next) => {
     console.log("places details according to creator/user appears in this route")
     const uid = req.params.uid
-    const userPlace = Places.find(user => {
+    const userPlaces = Places.filter(user => {
         return user.creator === uid
     })
-    if(!userPlace)
+    if(!userPlaces || userPlaces.length === 0)
     {
 
-        return next(new HttpError("could not find a place for the provided creator id..", 404))
+        return next(new HttpError("could not find places for the provided creator id..", 404))
        
     }
-    res.json({message: userPlace})
+    res.json({userPlaces})
 }
 
 
@@ -87,7 +86,7 @@ const deletePlace = (req, res, next) => {
 
 
 exports.getPlaceById = getPlaceById
-exports.getPlaceByUserId = getPlaceByUserId 
+exports.getPlacesByUserId = getPlacesByUserId 
 exports.createPlace = createPlace
 exports.updatePlace = updatePlace
 exports.deletePlace = deletePlace
