@@ -1,4 +1,5 @@
 const HttpError = require('../models/http-error')
+const uuid = require ('uuid').v4
 
 let Users = 
 [
@@ -35,19 +36,34 @@ const getUsers = (req,res,next) => {
 const addUsers = (req, res, next) => {
 
     const {name, email, password} = req.body
-    const createdUser = ({
-        name,
-        email,
-        password
-    })
-    Users.push(createdUser)
-    res.status(201).json({user: createdUser})
+    const userExist = Users.find(user => user.email === email)
+    if(userExist)
+    {
+        throw new HttpError('Could not create user, user exists', 422)
+    }
+    else{
+        const createdUser = ({
+            id: uuid(),
+            name,
+            email,
+            password
+        })
+        Users.push(createdUser)
+        res.status(201).json({user: createdUser})
+    }
+    
  
 }
 
 const userLogin = (req, res, next) => { 
 
-
+    const {email, password} = req.body
+    const identifiedUser = Users.find(user => user.email === email)
+    if(!identifiedUser || identifiedUser.password !== password)
+    {
+        throw new HttpError("Could not identify user, authentication failed", 401)
+    }
+    res.json({message: "Logged In"})
 }
 
 

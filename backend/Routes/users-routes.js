@@ -8,3 +8,4 @@ const router = express.Router()
 router.get('/', UsersControllers.getUsers)
 router.post('/signup', UsersControllers.addUsers)
 router.post('/login', UsersControllers.userLogin)
+module.exports = router
