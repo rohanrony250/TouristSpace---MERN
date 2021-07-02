@@ -1,4 +1,5 @@
 const HttpError = require('../models/http-error')
+const {validationResult} = require('express-validator')
 const uuid = require ('uuid').v4
 
 let Users = 
@@ -34,6 +35,12 @@ const getUsers = (req,res,next) => {
 }
 
 const addUsers = (req, res, next) => {
+
+    const validationError = validationResult(req)
+    if(!validationError.isEmpty())
+    {
+        throw new HttpError("Could not sign you up, please check all fields once again..", 422)
+    }
 
     const {name, email, password} = req.body
     const userExist = Users.find(user => user.email === email)

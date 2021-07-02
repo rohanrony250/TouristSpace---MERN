@@ -1,4 +1,6 @@
 const HttpError = require('../models/http-error')
+const uuid = require('uuid').v4
+const { validationResult } = require('express-validator')
 let Places = 
 [
     {
@@ -49,10 +51,16 @@ const getPlacesByUserId = (req, res, next) => {
 // for creating new places
 
 const createPlace = (req, res, next) => {
+    const validationError = validationResult(req)
+    console.log(validationError)
+    if(!validationError.isEmpty())
+    {
+        throw new HttpError("could not create place, please check your inputs.. some fields are invalid", 422)
+    }
     const {title, description, coordinates, address, creator} = req.body
     const createdPlace = 
     {
-        // id : uuid.v35,
+        id : uuid(),
         title, 
         description, 
         location: coordinates, 
@@ -65,6 +73,11 @@ const createPlace = (req, res, next) => {
 }
 
 const updatePlace = (req, res, next) => {
+    const validationError = validationResult(req)
+    if(!validationError.isEmpty())
+    {
+        throw new HttpError("could not update place, please check your inputs.. some fields are invalid", 422)
+    }
     const {title, description} = req.body;
     const placeId = req.params.pid;
     const updatePlace = { ...Places.find(p => p.id === placeId) }
@@ -79,6 +92,10 @@ const updatePlace = (req, res, next) => {
 const deletePlace = (req, res, next) => {
 
     const placeId = req.params.pid;
+    if(!Places.find(p => p.id === placeId))
+    {
+        throw new HttpError("place doesnt exist, hence could not delete..",422)
+    }
     Places = Places.filter(p => p.id != placeId)
     res.status(200).json({message: "Deleted Place..!"})
 
