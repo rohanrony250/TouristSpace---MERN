@@ -57,7 +57,11 @@ const createPlace = (req, res, next) => {
     {
         throw new HttpError("could not create place, please check your inputs.. some fields are invalid", 422)
     }
-    const {title, description, coordinates, address, creator} = req.body
+    const {title, description, address, creator} = req.body
+    const coordinates = {
+        lat: 29.389714,
+        lng: 48.0011012
+    }
     const createdPlace = 
     {
         id : uuid(),
