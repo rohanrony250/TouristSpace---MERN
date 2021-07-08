@@ -1,6 +1,9 @@
 const HttpError = require('../models/http-error')
 const {validationResult} = require('express-validator')
 const uuid = require ('uuid').v4
+const Usermodel = require('../models/User')
+
+
 
 let Users = 
 [
@@ -34,32 +37,51 @@ const getUsers = (req,res,next) => {
 
 }
 
-const addUsers = (req, res, next) => {
+const addUsers = async (req, res, next) => {
 
     const validationError = validationResult(req)
+    let existingUser;
+    let createdUser;
     if(!validationError.isEmpty())
     {
-        throw new HttpError("Could not sign you up, please check all fields once again..", 422)
+        return next(new HttpError("Could not sign you up, please check all fields once again..", 422))
     }
 
-    const {name, email, password} = req.body
-    const userExist = Users.find(user => user.email === email)
-    if(userExist)
+    const {name, email, password, places} = req.body
+
+    try
     {
-        throw new HttpError('Could not create user, user exists', 422)
+        existingUser = await Usermodel.findOne({email: email})
     }
-    else{
-        const createdUser = ({
-            id: uuid(),
-            name,
-            email,
-            password
-        })
-        Users.push(createdUser)
-        res.status(201).json({user: createdUser})
+    catch(err)
+    {
+        return next(new HttpError('Something went wrong, please try again later', 500))
     }
+
+    if(existingUser)
+    {
+        return next(new HttpError('User already exists, please login instead..', 422))
+    }
+
+    createdUser = new Usermodel({
+        name,
+        email,
+        password, 
+        image: "https://picsum.photos/500",
+        places 
+    })
     
- 
+
+    try
+    {
+       await createdUser.save()
+    }
+    catch(err)
+    {
+        return next(new HttpError('Something went wrong, please try again later..', 500))
+    }
+    res.status(201).json({user: createdUser.toObject({getters: true})})
+    
 }
 
 const userLogin = (req, res, next) => { 
