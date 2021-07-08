@@ -5,36 +5,25 @@ const Usermodel = require('../models/User')
 
 
 
-let Users = 
-[
+
+
+
+const getUsers = async (req,res,next) => {
+ 
+   let users;
+    try
     {
-        id: 'u1',
-        name: "Rohan Rony",
-        email: "rohanrony@hotmail.com",
-        password: "******"
-
-    },
+       users = await Usermodel.find({}, '-password')
+    }
+    catch(err)
     {
-        id: 'u2',
-        name: "Amaan Khan",
-        email: "amaanKhan@hotmail.com",
-        password: "******"
-
-    },
+        return next(new HttpError('Something went wrong, please try again', 500))
+    }
+    if(!users)
     {
-        id: 'u3',
-        name: "Sharath Pradeep",
-        email: "sharathPradeep@hotmail.com",
-        password: "******"
-
-    },
-]
-
-
-const getUsers = (req,res,next) => {
-
-    res.status(200).json({users: Users})
-
+        return next(new HttpError('No users found!', 422))
+    }
+    res.status(200).json({users: users.map(user => user.toObject({getters: true}))})
 }
 
 const addUsers = async (req, res, next) => {
@@ -84,14 +73,23 @@ const addUsers = async (req, res, next) => {
     
 }
 
-const userLogin = (req, res, next) => { 
+const userLogin = async (req, res, next) => { 
 
     const {email, password} = req.body
-    const identifiedUser = Users.find(user => user.email === email)
-    if(!identifiedUser || identifiedUser.password !== password)
+    let identifiedUser;
+    try
     {
-        throw new HttpError("Could not identify user, authentication failed", 401)
+        identifiedUser = await Usermodel.findOne({email : email, password: password})
     }
+    catch(err)
+    {
+        return next(new HttpError('Something went wrong, please try again later', 500))
+    }
+    if(!identifiedUser)
+    {
+        return next(new HttpError('Could not find user, authentication failed', 401))
+    }
+
     res.json({message: "Logged In"})
 }
 
