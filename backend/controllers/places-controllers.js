@@ -1,6 +1,7 @@
 const HttpError = require('../models/http-error')
 const uuid = require('uuid').v4
 const { validationResult } = require('express-validator')
+const Placemodel = require('../models/Place')
 let Places = 
 [
     {
@@ -50,7 +51,7 @@ const getPlacesByUserId = (req, res, next) => {
 
 // for creating new places
 
-const createPlace = (req, res, next) => {
+const createPlace = async (req, res, next) => {
     const validationError = validationResult(req)
     console.log(validationError)
     if(!validationError.isEmpty())
@@ -62,17 +63,26 @@ const createPlace = (req, res, next) => {
         lat: 29.389714,
         lng: 48.0011012
     }
-    const createdPlace = 
-    {
-        id : uuid(),
+    const createdPlace = new Placemodel({
         title, 
         description, 
-        location: coordinates, 
+        image: "https://images.unsplash.com/photo-1611469950170-b492451694ba?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1267&q=80",
         address, 
-        creator,
-    } 
+        location: coordinates, 
+        creator
+    }); 
     
-    Places.push(createdPlace)
+    try
+    {
+        await createdPlace.save()
+    }
+    catch(err)
+    {   
+        const Error = new HttpError('Error in adding new place', 500)
+        return next(Error)
+    }
+
+
     res.status(201).json({place: createdPlace})
 }
 
