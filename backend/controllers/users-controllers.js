@@ -36,7 +36,7 @@ const addUsers = async (req, res, next) => {
         return next(new HttpError("Could not sign you up, please check all fields once again..", 422))
     }
 
-    const {name, email, password, places} = req.body
+    const {name, email, password} = req.body
 
     try
     {
@@ -57,7 +57,7 @@ const addUsers = async (req, res, next) => {
         email,
         password, 
         image: "https://picsum.photos/500",
-        places 
+        places: [] 
     })
     
 
