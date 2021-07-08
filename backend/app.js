@@ -1,9 +1,11 @@
 const express = require('express')
+const mongoose = require ('mongoose')
 const bodyParser = require("body-parser")
 const PlacesRouter = require('./Routes/places-routes')
 const UsersRouter = require('./Routes/users-routes')
 const HttpError = require('./models/http-error')
 const app = express()
+const mongoUrl = 'mongodb+srv://Rohan:6rztkqYYPCIm6ZkO@cluster0-touristspace.nmdjw.mongodb.net/places_database?retryWrites=true&w=majority'
 
 app.use(bodyParser.json())
 app.use('/api/places',PlacesRouter)
@@ -24,4 +26,12 @@ app.use((error, req, res, next) => {
     res.status(error.code || 500)
     res.json({message: error.message || "unknown error occurred... "})
 })
-app.listen(5000)
+
+mongoose.connect(mongoUrl, {useNewUrlParser: true, useUnifiedTopology: true})
+.then(() => {
+    app.listen(5000)
+})
+.catch((err) => {
+    console.log(err)
+})
+
