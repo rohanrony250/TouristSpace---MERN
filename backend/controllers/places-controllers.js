@@ -1,4 +1,5 @@
 const HttpError = require('../models/http-error')
+const mongoose = require('mongoose')
 const uuid = require('uuid').v4
 const { validationResult } = require('express-validator')
 const Placemodel = require('../models/Place')
@@ -99,9 +100,17 @@ const createPlace = async (req, res, next) => {
         return next(new HttpError('Something went wrong, please try again later', 500))
     }
 
+    if(!user)
+    {
+        return next(new HttpError('Could not find user, oops!', 404))
+    }
+
+
     try
     {
-        await createdPlace.save()
+        const session = await mongoose.startSession()
+        session.startTransaction()
+        createdPlace.save({session : session})
     }
     catch(err)
     {   
