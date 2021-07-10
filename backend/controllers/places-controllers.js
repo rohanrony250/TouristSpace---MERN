@@ -110,7 +110,10 @@ const createPlace = async (req, res, next) => {
     {
         const session = await mongoose.startSession()
         session.startTransaction()
-        createdPlace.save({session : session})
+        await createdPlace.save({session : session})
+        Usermodel.places.push(createdPlace);
+        await Usermodel.save({session : session})
+        await session.commitTransaction()
     }
     catch(err)
     {   
