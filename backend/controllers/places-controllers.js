@@ -2,6 +2,7 @@ const HttpError = require('../models/http-error')
 const uuid = require('uuid').v4
 const { validationResult } = require('express-validator')
 const Placemodel = require('../models/Place')
+const Usermodel = require('../models/User')
 let Places = 
 [
     {
@@ -69,6 +70,7 @@ const getPlacesByUserId = async (req, res, next) => {
 
 const createPlace = async (req, res, next) => {
     const validationError = validationResult(req)
+    let user;
     console.log(validationError)
     if(!validationError.isEmpty())
     {
@@ -88,6 +90,15 @@ const createPlace = async (req, res, next) => {
         creator
     }); 
     
+    try
+    {
+        user = await Usermodel.findOne(creator)
+    }
+    catch(err)
+    {
+        return next(new HttpError('Something went wrong, please try again later', 500))
+    }
+
     try
     {
         await createdPlace.save()
