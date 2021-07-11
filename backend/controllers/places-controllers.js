@@ -69,9 +69,10 @@ const getPlacesByUserId = async (req, res, next) => {
 
 // for creating new places
 
-const createPlace = async (req, res, next) => {
+const createPlace = async (req, res, next) => 
+{
+    let user
     const validationError = validationResult(req)
-    let user;
     console.log(validationError)
     if(!validationError.isEmpty())
     {
@@ -93,7 +94,7 @@ const createPlace = async (req, res, next) => {
     
     try
     {
-        user = await Usermodel.findOne(creator)
+        user = await Usermodel.findById(creator)
     }
     catch(err)
     {
@@ -111,16 +112,17 @@ const createPlace = async (req, res, next) => {
         const session = await mongoose.startSession()
         session.startTransaction()
         await createdPlace.save({session : session})
-        Usermodel.places.push(createdPlace);
-        await Usermodel.save({session : session})
+        user.places.push(createdPlace);
+        await user.save({session : session})
         await session.commitTransaction()
     }
+
+
     catch(err)
     {   
         const Error = new HttpError('Error in adding new place', 500)
         return next(Error)
     }
-
 
     res.status(201).json({place: createdPlace})
 }
