@@ -6,10 +6,16 @@ import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from "../../S
 import { useForm } from "../../Shared/Hooks/form-hook" 
 import Button from "../../Shared/Components/FormElements/Button"
 import {AuthContext} from "../../Shared/Components/Context/auth-context"
+import ErrorModal from "../../Shared/Components/UI-Elements/Modal/ErrorModal"
+import LoadingState from "../../Shared/Components/UI-Elements/LoadingSpinner"
 const Auth = () =>
 {
     const auth = useContext(AuthContext)
     const [LoginMode, setIsLoginMode] = useState(true)
+    const [isLoading, setIsLoading] = useState(false)
+    const [error, setError] = useState(false)
+
+
     const [formState, inputHandler, setFormData] = useForm({
         email: {
             value: '',
@@ -35,6 +41,7 @@ const Auth = () =>
 
             try
             {
+                setIsLoading(true);
                 const response = await fetch('http://localhost:5000/api/users/signup', 
                 {
                     method : "POST",
@@ -51,17 +58,21 @@ const Auth = () =>
 
                 const responseData = await response.json();
                 console.log(responseData);
+                setIsLoading(false)
+                auth.login()
             }
             catch(err)
             {
+                setIsLoading(false)
                 console.log(err);
+                setError(err.message || "Something went wrong, please try again.");
             }
         }
 
         
+        
 
-
-        auth.login()
+        
         // console.log(formState.inputs)
     }
 
@@ -90,6 +101,7 @@ const Auth = () =>
 
     return(
         <Card className = "authentication">
+            {<LoadingState asOverlay/>}
             <h2>
                 Login Required
             </h2>
