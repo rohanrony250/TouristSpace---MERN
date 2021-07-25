@@ -8,6 +8,16 @@ const app = express()
 const mongoUrl = 'mongodb+srv://Rohan:6rztkqYYPCIm6ZkO@cluster0-touristspace.nmdjw.mongodb.net/places_database?retryWrites=true&w=majority'
 
 app.use(bodyParser.json())
+
+//dealing with headers and CORS policy
+
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
+    next();
+})
+
 app.use('/api/places',PlacesRouter)
 app.use('/api/users', UsersRouter)
 
