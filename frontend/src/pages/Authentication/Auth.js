@@ -21,11 +21,38 @@ const Auth = () =>
         },
     }, false)
 
-    const authSubmitHandler = (event) =>
+    const authSubmitHandler = async (event) =>
     {
         event.preventDefault()
+
+
+        if(LoginMode)
+        {
+
+        }
+        else
+        {
+
+            fetch('http://localhost:5000/api/users/signup', 
+            {
+                method : "POST",
+                headers : {
+                    'Content-Type' : "application/json"
+                },
+                body : JSON.stringify({
+                    name : formState.inputs.name.value, 
+                    email : formState.inputs.email.value,
+                    password : formState.inputs.password.value
+                })
+            })
+
+        }
+
+        
+
+
         auth.login()
-        console.log(formState.inputs)
+        // console.log(formState.inputs)
     }
 
     const switchModeHandler = () =>
@@ -46,7 +73,7 @@ const Auth = () =>
                 }
             }, false)
         }
-        setIsLoginMode(prevMode => !prevMode)
+        setIsLoginMode(prevMode => !prevMode);
     }
 
 
@@ -92,8 +119,8 @@ const Auth = () =>
                     onInput = {inputHandler}
                 />
                 <Button type = "submit" disabled = {!formState.isValid}>{LoginMode ? 'LOGIN' : 'SIGNUP'}</Button>
-                <Button type = "submit" inverse onClick = {switchModeHandler}>Switch To {LoginMode ? 'Sign Up' : 'Login'} Mode</Button> 
             </form>
+            <Button type = "submit" inverse onClick = {switchModeHandler}>Switch To {LoginMode ? 'Sign Up' : 'Login'} Mode</Button> 
         </Card> 
     )
 }
