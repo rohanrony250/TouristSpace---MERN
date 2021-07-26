@@ -101,7 +101,7 @@ const Auth = () =>
 
     return(
         <Card className = "authentication">
-            {<LoadingState asOverlay/>}
+            {isLoading && <LoadingState asOverlay/>}
             <h2>
                 Login Required
             </h2>
