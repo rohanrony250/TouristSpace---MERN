@@ -23,6 +23,10 @@ export const useHttpClient = () =>
 
             const responseData = await response.json();
 
+            
+            activeHttpRequests.current = activeHttpRequests.current.filter(reqCtrl => reqCtrl !== httpAbortCtrl);
+
+
             if(!response.ok)
             {
                 throw new Error(responseData.message);
@@ -36,7 +40,7 @@ export const useHttpClient = () =>
         {
             setIsLoading(false);
             setError(err.message || "Something unfortunate happened please try again later.");
-
+            throw err;
         }
     }, [])
 
