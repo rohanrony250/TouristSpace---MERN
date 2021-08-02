@@ -13,13 +13,12 @@ const Users = () =>
 
         const fetchUsers = async () => 
         {
-            setIsLoading(true);
+            
             try
             {
                 const responseData = await sendRequest('http://localhost:5000/api/users');
                 
 
-                setIsLoading(false);
                 setLoadedUsers(responseData.users)
             }
             catch(err)

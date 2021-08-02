@@ -4,7 +4,7 @@ import Input from "../../Shared/Components/FormElements/Input"
 import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from "../../Shared/Util/validators"
 import Button from "../../Shared/Components/FormElements/Button"
 import { useForm } from "../../Shared/Hooks/form-hook"
-
+import {useHttpClient} from "../../Shared/Hooks/http-hook"
 
 
 
@@ -12,6 +12,8 @@ import { useForm } from "../../Shared/Hooks/form-hook"
 
 const NewPlace = () =>
 {
+
+    const {isLoading, clearError, sendRequest, error} = useHttpClient()
     const [formState , inputHandler] = useForm(
         {
             title: {
@@ -37,7 +39,12 @@ const NewPlace = () =>
     const placeSubmitHandler = (event) =>
     {
         event.preventDefault()
-        console.log(formState.inputs)
+        sendRequest('http://localhost:5000/api/places', 'POST', JSON.stringify({
+            title : formState.inputs.title.value,
+            description : formState.inputs.description.value,
+            address : formState.inputs.address.value,
+            creator : formState.inputs.creator.value
+        }))
     }
 
   
