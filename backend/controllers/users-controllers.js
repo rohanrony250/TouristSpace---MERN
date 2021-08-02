@@ -90,7 +90,12 @@ const userLogin = async (req, res, next) => {
         return next(new HttpError('Could not find user, authentication failed', 401))
     }
 
-    res.json({message: "Logged In"})
+    res.json(
+        {
+            message: "Logged In",
+            user: identifiedUser.toObject({getters: true})
+        
+        })
 }
 
 
